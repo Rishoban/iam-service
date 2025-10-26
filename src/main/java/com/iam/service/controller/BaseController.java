@@ -1,5 +1,6 @@
 package com.iam.service.controller;
 
+import com.iam.service.mapper.PageOption;
 import com.iam.service.service.BaseService;
 import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
@@ -11,8 +12,14 @@ public abstract class BaseController<T, ID, CreateDTO, UpdateDTO> {
     abstract protected BaseService<T, ID, CreateDTO, UpdateDTO> getService();
 
     @GetMapping
-    public ResponseEntity<List<T>> getAll(){
-        List<T> listOfData = getService().findAll();
+    public ResponseEntity<List<T>> getAll(
+            @RequestParam(defaultValue = "0") int start,
+            @RequestParam(defaultValue = "30") int end,
+            @RequestParam(defaultValue = "id") String sortBy,
+            @RequestParam(defaultValue = "asc") String sortOrder
+    ){
+        PageOption pageOption = new PageOption(start, end, sortBy, sortOrder);
+        List<T> listOfData = getService().findAll(pageOption);
         return ResponseEntity.ok(listOfData);
     }
 

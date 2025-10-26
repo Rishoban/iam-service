@@ -1,5 +1,10 @@
 package com.iam.service.service;
 
+import com.iam.service.mapper.PageOption;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -12,8 +17,12 @@ public abstract class BaseService<T, ID, CreateDTO, UpdateDTO> {
     protected abstract RuntimeException getNotFoundException();
 
     @Transactional(readOnly = true)
-    public List<T> findAll(){
-        return getRepository().findAll();
+    public List<T> findAll(PageOption pageOptions){
+        Pageable pageCondition = PageRequest.of(pageOptions.getStartIndex(), pageOptions.getEndIndex(),
+                pageOptions.getSortOder().equalsIgnoreCase("desc") ? Sort.by(pageOptions.getSortBy()).descending() : Sort.by(pageOptions.getSortBy()).ascending());
+        Page<T> result = getRepository().findAll(pageCondition);
+        return result.stream()
+                .toList();
     }
 
     @Transactional(readOnly = true)
