@@ -1,20 +1,13 @@
 package com.iam.service.service;
 
 import com.iam.service.entity.User;
-import com.iam.service.exception.IllegalData;
 import com.iam.service.exception.UserAlreadyExistsException;
 import com.iam.service.exception.UserNotFoundException;
 import com.iam.service.mapper.UpdateUserDto;
 import com.iam.service.mapper.UserDTO;
 import com.iam.service.repository.UserRepository;
-import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.transaction.annotation.Transactional;
 import org.springframework.stereotype.Service;
-
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
 
 @Service
 public class UserServiceImpl extends BaseService<User, Long, UserDTO, UpdateUserDto> {
